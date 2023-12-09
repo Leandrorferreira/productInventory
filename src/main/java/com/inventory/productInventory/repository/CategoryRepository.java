@@ -21,7 +21,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             "WHERE (:id IS NULL OR c.ID = :id) " +
             "AND (:type IS NULL OR c.TYPE = :type) " +
             "AND (:name IS NULL OR c.NAME = :name) " +
-            "AND (:productName IS NULL OR p.NAME = :productName); ", nativeQuery = true)
+            "AND (:productName IS NULL OR p.NAME LIKE %:productName%); ", nativeQuery = true)
     Page<Category> search(
             @Param("id") Long id,
             @Param("name") String name,
