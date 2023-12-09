@@ -1,6 +1,8 @@
 package com.inventory.productInventory.repository;
 
 import com.inventory.productInventory.entity.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,14 +17,15 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query(value = "SELECT DISTINCT (c.*) " +
             "FROM CATEGORY c " +
-            "INNER JOIN product p ON c.ID = p.ID_CATEGORY " +
+            "LEFT JOIN product p ON c.ID = p.ID_CATEGORY " +
             "WHERE (:id IS NULL OR c.ID = :id) " +
             "AND (:type IS NULL OR c.TYPE = :type) " +
             "AND (:name IS NULL OR c.NAME = :name) " +
             "AND (:productName IS NULL OR p.NAME = :productName); ", nativeQuery = true)
-    List<Category> search(
+    Page<Category> search(
             @Param("id") Long id,
             @Param("name") String name,
             @Param("type") Integer type,
-            @Param("productName") String productName);
+            @Param("productName") String productName,
+            Pageable pageable);
 }
